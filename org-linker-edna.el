@@ -43,6 +43,10 @@
   "Function used to get/generate an ID of an Org entry."
   :type 'function)
 
+(defcustom org-linker-edna-actions '("scheduled" "deadline" "todo")
+  "FIXME"
+  :type '(repeat string))
+
 (defun org-linker-edna-ids (s)
   "Return a list of ids found in S.
 S is a string formatted as org edna ids property value."
@@ -136,10 +140,6 @@ S is a string formatted as org edna ids property value."
 		      todo-state
 		      scheduled-date
 		      deadline-date)))))
-
-(defvar org-linker-edna-actions '("scheduled" "deadline" "todo"))
-
-(setq org-linker-edna-actions '("scheduled" "deadline" "todo"))
 
 (defun org-linker-edna-date-selector (type)
   (read-string (format "%s: " (capitalize type))))
