@@ -4,7 +4,7 @@
 
 ;; Author: tosh <tosh.lyons@gmail.com>
 ;; Version: 0.1
-;; Package-Requires: (org org-linker org-edna)
+;; Package-Requires: ((emacs "24.1") org org-linker)
 ;; URL: https://github.com/toshism/org-linker-edna
 ;; Keywords: convenience, hypermedia
 
