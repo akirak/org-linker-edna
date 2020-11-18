@@ -29,10 +29,10 @@
 
 ;;; Code:
 
-(require 'org-linker)
 
 (setq org-linker-to-heading t)
 (setq link-id-function 'org-id-get-create)
+(declare-function org-linker "ext:org-linker")
 
 
 (defun org-linker-edna-ids (s)
