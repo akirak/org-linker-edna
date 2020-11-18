@@ -37,7 +37,6 @@
   :group 'org-linker
   :group 'org-edna)
 
-(setq org-linker-to-heading t)
 (setq link-id-function 'org-id-get-create)
 (declare-function org-linker "ext:org-linker")
 
@@ -174,8 +173,8 @@ S is a string formatted as org edna ids property value."
 ;;;###autoload
 (defun org-linker-edna ()
   (interactive)
-  (org-linker 'org-linker-edna-callback))
-
+  (let ((org-linker-to-heading t))
+    (org-linker 'org-linker-edna-callback)))
 
 (provide 'org-linker-edna)
 
