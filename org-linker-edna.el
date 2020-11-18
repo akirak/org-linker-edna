@@ -29,6 +29,13 @@
 
 ;;; Code:
 
+(defgroup org-linker-edna nil
+  "Org Edna support for Org Linker."
+  :group 'convenience
+  :group 'hypermedia
+  :group 'org
+  :group 'org-linker
+  :group 'org-edna)
 
 (setq org-linker-to-heading t)
 (setq link-id-function 'org-id-get-create)
