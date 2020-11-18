@@ -37,9 +37,11 @@
   :group 'org-linker
   :group 'org-edna)
 
-(setq link-id-function 'org-id-get-create)
 (declare-function org-linker "ext:org-linker")
 
+(defcustom org-linker-edna-link-id-function #'org-id-get-create
+  "Function used to get/generate an ID of an Org entry."
+  :type 'function)
 
 (defun org-linker-edna-ids (s)
   "Return a list of ids found in S.
@@ -52,7 +54,7 @@ S is a string formatted as org edna ids property value."
 (defun org-linker-edna-get-or-create-id-for-marker (m)
   (save-excursion
     (goto-char (marker-position m))
-    (funcall link-id-function)))
+    (funcall org-linker-edna-link-id-function)))
 
 
 (defun org-linker-edna-set-prop (source target property)
