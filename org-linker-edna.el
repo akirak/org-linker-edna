@@ -46,10 +46,8 @@
 (defun org-linker-edna-ids (s)
   "Return a list of ids found in S.
 S is a string formatted as org edna ids property value."
-  (when s
-    (when (string-match "ids(\\([^\\)]*\\)).*" s)
-      (split-string (match-string 1 s)))))
-
+  (when (and s (string-match "ids(\\([^\\)]*\\)).*" s))
+    (split-string (match-string 1 s))))
 
 (defun org-linker-edna-get-or-create-id-for-marker (m)
   (save-excursion
