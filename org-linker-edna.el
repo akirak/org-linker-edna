@@ -164,6 +164,7 @@ S is a string formatted as org edna ids property value."
     ))
 
 
+;;;###autoload
 (defun org-linker-edna ()
   (interactive)
   (org-linker 'org-linker-edna-callback))
