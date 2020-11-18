@@ -4,7 +4,7 @@
 
 ;; Author: tosh <tosh.lyons@gmail.com>
 ;; Version: 0.1
-;; Package-Requires: ((emacs "24.1") org org-linker)
+;; Package-Requires: ((emacs "25.1") org org-linker)
 ;; URL: https://github.com/toshism/org-linker-edna
 ;; Keywords: convenience, hypermedia
 
@@ -43,9 +43,13 @@
   "Function used to get/generate an ID of an Org entry."
   :type 'function)
 
-(defcustom org-linker-edna-actions '("scheduled" "deadline" "todo")
+(defcustom org-linker-edna-actions
+  '(("scheduled" . (lambda () (list :scheduled (org-linker-edna-date-selector "scheduled"))))
+    ("deadline" . (lambda () (list :deadline (org-linker-edna-date-selector "deadline"))))
+    ("todo" . (lambda () (list :todo (org-linker-edna-state-selector)))))
   "FIXME"
-  :type '(repeat string))
+  :type '(alist :key-type string
+                :value-type function))
 
 (defun org-linker-edna-ids (s)
   "Return a list of ids found in S.
@@ -101,14 +105,11 @@ S is a string formatted as org edna ids property value."
   (let* ((actions (helm :sources (helm-build-sync-source "Select Trigger Actions"
 				   :candidates org-linker-edna-actions
 				   :action 'org-linker-edna-actions-dispatcher)))
-	 (todo (plist-get actions :todo))
-	 (scheduled (plist-get actions :scheduled))
-	 (deadline (plist-get actions :deadline))
-	 (todo-state (when todo
+	 (todo-state (when-let (todo (plist-get actions :todo))
 		       (concat " todo!(" todo ")")))
-	 (scheduled-date (when scheduled
+	 (scheduled-date (when-let (scheduled (plist-get actions :scheduled))
 			   (concat " scheduled!(\"" scheduled "\")")))
-	 (deadline-date (when deadline
+	 (deadline-date (when-let (deadline (plist-get actions :deadline))
 			  (concat " deadline!(\"" deadline "\")")))
 	 (existing-trigger (org-entry-get (marker-position target)
                                           "TRIGGER"))
@@ -151,13 +152,8 @@ S is a string formatted as org edna ids property value."
   (helm :sources (helm-build-sync-source "Select TODO state"
 		   :candidates org-todo-keywords-1)))
 
-(defun org-linker-edna-action-dispatcher (candidate)
-  (cond ((string= "scheduled" candidate) `(:scheduled ,(org-linker-edna-date-selector "scheduled")))
-	((string= "deadline" candidate) `(:deadline ,(org-linker-edna-date-selector "deadline")))
-	((string= "todo" candidate) `(:todo ,(org-linker-edna-state-selector)))))
-
 (defun org-linker-edna-actions-dispatcher (candidate)
-  (mapcan 'org-linker-edna-action-dispatcher (helm-marked-candidates)))
+  (mapcan #'funcall (helm-marked-candidates)))
 
 (defun org-linker-edna-callback (source target)
   (org-linker-edna-get-or-create-id-for-marker source)
